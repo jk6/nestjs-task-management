@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Logger, Param, Patch, Post, Query } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
@@ -8,10 +8,14 @@ import { TasksService } from './tasks.service';
 
 @Controller('tasks')
 export class TasksController {
+    private logger = new Logger('TasksController');
+
     constructor(private tasksService: TasksService) {}
 
     @Get()
-    getTasks(@Query() filterDto: GetTasksFilterDto): Promise<Task[]> {
+    getTasks(
+        @Query() filterDto: GetTasksFilterDto
+    ): Promise<Task[]> {
         return this.tasksService.getTasks(filterDto);
     }
 
