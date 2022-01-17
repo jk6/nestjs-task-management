@@ -1,5 +1,5 @@
 import { NotFoundException } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
+import { Test, TestingModule } from '@nestjs/testing';
 import { TaskStatus } from './task-status.enum';
 import { TasksRepository } from './tasks.repository';
 import { TasksService } from './tasks.service';
@@ -19,11 +19,11 @@ const mockUser = {
 };
 describe('TasksService', () => {
     let tasksService: TasksService;
-    let tasksRepository;
+    let tasksRepository; // was getting an issue with autoSuggest and mockResolveValue not working properly when type was declared here
 
     beforeEach(async () => {
         // initialize a NestJS module with tasksService and tasksRepository
-        const module = await Test.createTestingModule({
+        const module: TestingModule = await Test.createTestingModule({
             providers: [
                 TasksService,
                 {
@@ -33,8 +33,8 @@ describe('TasksService', () => {
             ]
         }).compile();
 
-        tasksService = module.get(TasksService);
-        tasksRepository = module.get(TasksRepository);
+        tasksService = module.get<TasksService>(TasksService);
+        tasksRepository = module.get<TasksRepository>(TasksRepository);
     });
 
     describe('getTasks', () => {
